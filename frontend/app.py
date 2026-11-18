@@ -38,11 +38,39 @@ prod_data = {
 
 # If the Predict Sales button is clicked, send the POST request with the payload
 if st.button('Predict Sales', type='primary'):
-  response = requests.post(f'{BACKEND_URL}/v1/onestore', json=prod_data)
+  response = requests.post(f'{BACKEND_URL}/v1/singlepred', json=prod_data)
 
   if response.status_code == 200:
     # Received a successful response
     # Get the JSON payload
     result = response.json()
 
-    st.success(result['Product_Allocated_Area_Log'])
+    # Get the predicted sales value
+    sales_prediction = result['Sales prediction']
+    output_str = f'Expected sales for {prod_type_cat} at {store_type} is {sales_prediction}'
+
+    st.success(output_str)
+  else:
+    st.error('Unable to make a prediction')
+
+# Batch prediction
+st.subheader('Batch Prediction')
+
+data_file = st.file_uploader('Upload a CSV file', type=['csv'])
+if data_file is not None:
+  
+  if st.button('Predict for batch', type='primary'):
+    # Send the data file to the batch prediction endpoint
+    response = requests.post(f'{BACKEND_URL}/v1/batchpred', files={'data_file': data_file})
+
+    if response.status_code == 200:
+      # Received a valid response
+      results = response.json()
+
+      st.success('Batch prediction completed successfully')
+
+      # Get the results dict, convert to DF and display it
+      results_df = pd.DataFrame(results)
+      st.dataframe(results_df, use_container_width=True)
+    else:
+      st.error('Unable to make a prediction')
