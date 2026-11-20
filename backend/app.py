@@ -17,7 +17,7 @@ def home():
   return 'This is the SuperKart Sales Predictor model'
 
 # Endpoint for handling individual predictions
-@flask_app.post('/v1/singlepred')
+@flask_app.post('/v1/predict')
 def predict_sales():
   # Get the JSON data and unpack it
   prod_data_json = request.get_json()
@@ -44,7 +44,7 @@ def predict_sales():
   return jsonify({'Sales prediction': sales_pred})
 
 # Endpoint for batch predictions
-@flask_app.post('/v1/batchpred')
+@flask_app.post('/v1/predictbatch')
 def predict_sales_batch():
   # Get the csv file with the batch of dependent features
   input_file = request.files['data_file']
