@@ -38,7 +38,7 @@ prod_data = {
 
 # If the Predict Sales button is clicked, send the POST request with the payload
 if st.button('Predict Sales', type='primary'):
-  response = requests.post(f'{BACKEND_URL}/v1/singlepred', json=prod_data)
+  response = requests.post(f'{BACKEND_URL}/v1/predict', json=prod_data)
 
   if response.status_code == 200:
     # Received a successful response
@@ -58,10 +58,10 @@ st.subheader('Batch Prediction')
 
 data_file = st.file_uploader('Upload a CSV file', type=['csv'])
 if data_file is not None:
-  
+
   if st.button('Predict for batch', type='primary'):
     # Send the data file to the batch prediction endpoint
-    response = requests.post(f'{BACKEND_URL}/v1/batchpred', files={'data_file': data_file})
+    response = requests.post(f'{BACKEND_URL}/v1/predictbatch', files={'data_file': data_file})
 
     if response.status_code == 200:
       # Received a valid response
